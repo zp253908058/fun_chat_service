@@ -9,6 +9,4 @@ public class FunChatApplication {
     public static void main(String[] args) {
         SpringApplication.run(FunChatApplication.class, args);
     }
-
-
 }
