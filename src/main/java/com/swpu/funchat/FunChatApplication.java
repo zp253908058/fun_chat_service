@@ -10,4 +10,5 @@ public class FunChatApplication {
         SpringApplication.run(FunChatApplication.class, args);
     }
 
+
 }
