@@ -36,9 +36,14 @@ spring:
 
 mybatis:
   mapper-locations: classpath:/mapper/*.xml
-  type-aliases-package: com.teeny.wms.web.model
+  type-aliases-package: com.swpu.funchat.model.dto
   configuration:
     cache-enabled: false
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
     log-prefix: FunChat
     jdbc-type-for-null: varchar
+security:
+  oauth2:
+    client:
+      authentication-scheme: header
+      client-authentication-scheme: header

@@ -1,9 +1,12 @@
 package com.swpu.funchat.model.dto;
 
+import org.apache.ibatis.type.Alias;
+
 /**
  * Description: 用户信息
  * Created by Zhu Peng on 2019/6/12
  */
+@Alias("UserInfo")
 public class UserInfo {
     private long id;
     private long userId;

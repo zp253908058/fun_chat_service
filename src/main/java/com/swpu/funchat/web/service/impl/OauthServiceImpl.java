@@ -2,7 +2,7 @@ package com.swpu.funchat.web.service.impl;
 
 import com.swpu.funchat.model.dto.OauthClient;
 import com.swpu.funchat.model.dto.UserAuth;
-import com.swpu.funchat.web.dao.OauthDao;
+import com.swpu.funchat.web.dao.AuthDao;
 import com.swpu.funchat.web.service.OauthService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,20 +16,20 @@ import java.util.List;
 @Service
 public class OauthServiceImpl implements OauthService {
 
-    private OauthDao mOauthDao;
+    private AuthDao mAuthDao;
 
     @Autowired
-    public OauthServiceImpl(OauthDao oauthDao) {
-        mOauthDao = oauthDao;
+    public OauthServiceImpl(AuthDao authDao) {
+        mAuthDao = authDao;
     }
 
     @Override
     public List<OauthClient> getOauthClientByClientId(String clientId) {
-        return mOauthDao.getOauthClientByClientId(clientId);
+        return mAuthDao.getOauthClientByClientId(clientId);
     }
 
     @Override
     public List<UserAuth> getOauthUserByUsername(String username) {
-        return mOauthDao.getOauthUserByUsername(username);
+        return mAuthDao.getOauthUserByUsername(username);
     }
 }

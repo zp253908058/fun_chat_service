@@ -13,10 +13,12 @@ import java.util.List;
  */
 @Repository
 @Mapper
-public interface OauthDao {
+public interface AuthDao {
 
     List<OauthClient> getOauthClientByClientId(String clientId);
 
     List<UserAuth> getOauthUserByUsername(String username);
+
+    UserAuth getAuthByUsername(String username);
 
 }
