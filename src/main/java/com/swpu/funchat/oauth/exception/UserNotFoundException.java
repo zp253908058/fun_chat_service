@@ -11,6 +11,6 @@ package com.swpu.funchat.oauth.exception;
 public class UserNotFoundException extends RuntimeException {
 
     public UserNotFoundException() {
-        super("用户不存在");
+        super("user not found.");
     }
 }

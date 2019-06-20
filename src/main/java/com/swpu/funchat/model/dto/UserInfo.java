@@ -1,20 +1,20 @@
 package com.swpu.funchat.model.dto;
 
 import org.apache.ibatis.type.Alias;
+import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  * Description: 用户信息
  * Created by Zhu Peng on 2019/6/12
  */
 @Alias("UserInfo")
+
 public class UserInfo {
     private long id;
     private long userId;
     private String nickname;
     private String avatar;
     private int sex;
-    private String createDate;
-    private String lastModifyDate;
 
     public long getId() {
         return id;
@@ -56,19 +56,14 @@ public class UserInfo {
         this.sex = sex;
     }
 
-    public String getCreateDate() {
-        return createDate;
-    }
-
-    public void setCreateDate(String createDate) {
-        this.createDate = createDate;
-    }
-
-    public String getLastModifyDate() {
-        return lastModifyDate;
-    }
-
-    public void setLastModifyDate(String lastModifyDate) {
-        this.lastModifyDate = lastModifyDate;
+    @Override
+    public String toString() {
+        return "UserInfo{" +
+                "id=" + id +
+                ", userId=" + userId +
+                ", nickname='" + nickname + '\'' +
+                ", avatar='" + avatar + '\'' +
+                ", sex=" + sex +
+                '}';
     }
 }

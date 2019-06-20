@@ -1,8 +1,8 @@
 package com.swpu.funchat.web.dao;
 
+import com.swpu.funchat.model.dto.UserAuth;
 import com.swpu.funchat.model.dto.UserInfo;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -18,4 +18,6 @@ import org.springframework.stereotype.Repository;
 public interface UserDao {
 
     UserInfo getUserInfoById(long id);
+
+    UserAuth getUserAuthByUsername(String username);
 }

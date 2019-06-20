@@ -12,5 +12,7 @@ import com.swpu.funchat.model.dto.UserInfo;
  */
 public interface UserService {
 
+    UserInfo login(String username, String password);
+
     UserInfo getUserInfoById(long id);
 }

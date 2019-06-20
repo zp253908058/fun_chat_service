@@ -3,10 +3,11 @@
 
 <mapper namespace="com.swpu.funchat.web.dao.UserDao">
 
-    <select id="getUserById" resultType="UserInfo">
+    <select id="getUserInfoById" resultType="UserInfo">
         select * from user_info where user_id = #{id}
     </select>
 
-
-
+    <select id="getUserAuthByUsername" resultType="UserAuth">
+        select * from user_auth where identifier = #{username}
+    </select>
 </mapper>
