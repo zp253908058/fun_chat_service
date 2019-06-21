@@ -1,10 +1,15 @@
 package com.swpu.funchat.web.controller;
 
 import com.swpu.funchat.model.dto.UserInfo;
+import com.swpu.funchat.model.response.ResponseMessageEntity;
 import com.swpu.funchat.web.service.UserService;
-import org.apache.ibatis.type.Alias;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * Class description:
@@ -15,8 +20,9 @@ import org.springframework.web.bind.annotation.*;
  * @since 2019-06-16
  */
 @RestController
-@RequestMapping("/sign/")
+@RequestMapping(value = "/sign/", produces = "application/json;charset=UTF-8")
 public class SignController {
+    public static Logger mLogger = LoggerFactory.getLogger(SignController.class);
 
     private UserService mUserService;
 
@@ -27,12 +33,13 @@ public class SignController {
 
     @PostMapping("phone")
     public UserInfo phone(@RequestParam("phone") String phone, @RequestParam("password") String password) {
+        mLogger.info("phone = " + phone + ", password = " + password);
         return mUserService.login(phone, password);
     }
 
     @PostMapping("up")
-    public String register(@RequestParam("phone") String phone, @RequestParam("password") String password) {
-
-        return "注册成功";
+    public ResponseMessageEntity register(@RequestParam("phone") String phone, @RequestParam("password") String password) {
+        mLogger.info("phone = " + phone + ", password = " + password);
+        return new ResponseMessageEntity("注册成功");
     }
 }
