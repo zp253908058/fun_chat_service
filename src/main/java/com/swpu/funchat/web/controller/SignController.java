@@ -29,4 +29,10 @@ public class SignController {
     public UserInfo phone(@RequestParam("phone") String phone, @RequestParam("password") String password) {
         return mUserService.login(phone, password);
     }
+
+    @PostMapping("up")
+    public String register(@RequestParam("phone") String phone, @RequestParam("password") String password) {
+
+        return "注册成功";
+    }
 }
