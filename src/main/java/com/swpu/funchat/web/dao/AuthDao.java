@@ -15,10 +15,9 @@ import java.util.List;
 @Mapper
 public interface AuthDao {
 
-    List<OauthClient> getOauthClientByClientId(String clientId);
-
-    List<UserAuth> getOauthUserByUsername(String username);
+//    List<OauthClient> getOauthClientByClientId(String clientId);
+//
+//    List<UserAuth> getOauthUserByUsername(String username);
 
     UserAuth getAuthByUsername(String username);
-
 }
