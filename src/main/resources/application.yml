@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 80
   servlet:
     context-path: /funchat
 logging:
@@ -9,7 +9,6 @@ logging:
         security: DEBUG
     root: INFO
   file: FunChat.log
-
 spring:
   datasource:
     druid:
@@ -35,7 +34,6 @@ spring:
     password: Zp123...
   hateoas:
     use-hal-as-default-json-media-type: true
-
 mybatis:
   mapper-locations: classpath:/mapper/*.xml
   type-aliases-package: com.swpu.funchat.model.dto

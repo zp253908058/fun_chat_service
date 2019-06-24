@@ -4,10 +4,59 @@
 <mapper namespace="com.swpu.funchat.web.dao.UserDao">
 
     <select id="getUserInfoById" resultType="UserInfo">
-        select * from user_info where user_id = #{id}
+        select *
+        from user_info
+        where user_id = #{userId}
     </select>
 
-    <select id="getUserAuthByUsername" resultType="UserAuth">
-        select * from user_auth where identifier = #{username}
+    <select id="getUserAuthByPhone" resultType="UserAuth">
+        select *
+        from user_auth
+        where identifier = #{phone}
+          and identity_type = 1
     </select>
+
+    <select id="getUserAuthByUserId" resultType="UserAuth">
+        select *
+        from user_auth
+        where user_id = #{userId}
+    </select>
+
+    <update id="updateLoginDate">
+        update user_auth
+        set last_auth_date = CURRENT_TIMESTAMP
+        where user_id = #{userId}
+    </update>
+
+    <update id="updateNickname">
+        update user_info
+        set nickname=#{nickname},
+            last_modify_date = CURRENT_TIMESTAMP
+        where user_id = #{userId}
+    </update>
+
+    <select id="findId" resultType="UserId">
+        select *
+        from user_id
+        where user_id = #{userId}
+    </select>
+
+    <insert id="addUserId">
+        insert into user_id (user_id)
+            VALUE (#{userId});
+    </insert>
+
+    <insert id="addUserAuth" parameterType="UserAuth">
+        insert into user_auth (user_id, identity_type, identifier, credential)
+        VALUES (#{item.userId}, #{item.identityType}, #{item.identifier}, #{item.credential});
+    </insert>
+
+    <insert id="addUserInfoByUserId">
+        insert into user_info (user_id)
+        VALUES (#{userId});
+    </insert>
+
+    <update id="updateAvatar">
+        update user_info set avatar = #{url} where user_id = #{userId}
+    </update>
 </mapper>

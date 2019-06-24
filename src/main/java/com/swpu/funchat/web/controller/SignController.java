@@ -33,13 +33,12 @@ public class SignController {
 
     @PostMapping("phone")
     public UserInfo phone(@RequestParam("phone") String phone, @RequestParam("password") String password) {
-        mLogger.info("phone = " + phone + ", password = " + password);
         return mUserService.login(phone, password);
     }
 
     @PostMapping("up")
     public ResponseMessageEntity register(@RequestParam("phone") String phone, @RequestParam("password") String password) {
-        mLogger.info("phone = " + phone + ", password = " + password);
+        mUserService.register(phone, password);
         return new ResponseMessageEntity("注册成功");
     }
 }

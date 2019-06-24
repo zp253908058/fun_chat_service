@@ -1,15 +1,31 @@
 package com.swpu.funchat.web.service.impl;
 
+import com.swpu.funchat.config.FileStore;
+import com.swpu.funchat.exception.EmptyFileException;
+import com.swpu.funchat.exception.InnerServiceException;
 import com.swpu.funchat.model.dto.UserAuth;
+import com.swpu.funchat.model.dto.UserId;
 import com.swpu.funchat.model.dto.UserInfo;
-import com.swpu.funchat.oauth.exception.EmptyPasswordException;
-import com.swpu.funchat.oauth.exception.EmptyUsernameException;
 import com.swpu.funchat.oauth.exception.UserNotFoundException;
 import com.swpu.funchat.util.Check;
+import com.swpu.funchat.util.IdGenerator;
+import com.swpu.funchat.util.Validator;
 import com.swpu.funchat.web.dao.UserDao;
 import com.swpu.funchat.web.service.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
+import java.io.IOException;
+import java.net.Inet4Address;
+import java.net.InetAddress;
+import java.net.URL;
+import java.util.UUID;
 
 /**
  * Class description:
@@ -22,30 +38,99 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserServiceImpl implements UserService {
 
+    private static Logger mLogger = LoggerFactory.getLogger(UserServiceImpl.class);
+
     private UserDao mUserDao;
+    private Environment environment;
 
     @Autowired
     public void setUserDao(UserDao userDao) {
         mUserDao = userDao;
     }
 
+    @Autowired
+    public void setEnvironment(Environment environment) {
+        this.environment = environment;
+    }
+
     @Override
     public UserInfo login(String username, String password) {
         Check.checkUsername(username);
         Check.checkPassword(password);
-        UserAuth userAuth = mUserDao.getUserAuthByUsername(username);
-        System.out.println(userAuth);
+        UserAuth userAuth;
+        if (Validator.isMobileNumber(username)) {
+            userAuth = mUserDao.getUserAuthByPhone(username);
+        } else {
+            userAuth = mUserDao.getUserAuthByUserId(username);
+        }
         if (userAuth == null) {
             throw new UserNotFoundException();
         }
         Check.checkPassword(password, userAuth.getCredential());
+        mUserDao.updateLoginDate(userAuth.getUserId());
         UserInfo user = mUserDao.getUserInfoById(userAuth.getUserId());
         System.out.println(user);
         return user;
+
+        //TODO 验证账号是否可用
     }
 
     @Override
-    public UserInfo getUserInfoById(long id) {
-        return mUserDao.getUserInfoById(id);
+    @Transactional
+    public void register(String phone, String password) {
+        Check.checkPhone(phone);
+        Check.checkPassword(password);
+        long userId;
+        for (; ; ) {
+            userId = IdGenerator.generateId();
+            UserId id = mUserDao.findId(userId);
+            if (id == null) {
+                break;
+            }
+        }
+        mUserDao.addUserId(userId);
+        UserAuth userAuth = new UserAuth();
+        userAuth.setUserId(userId);
+        userAuth.setIdentityType(1);
+        userAuth.setIdentifier(phone);
+        userAuth.setCredential(password);
+        mUserDao.addUserAuth(userAuth);
+        mUserDao.addUserInfoByUserId(userId);
+        //TODO 验证账号是否可用
+    }
+
+    @Override
+    public void updateNickname(long id, String nickname) {
+        mUserDao.updateNickname(id, nickname);
+    }
+
+    @Override
+    public void updateAvatar(long userId, MultipartFile multipartFile) throws IOException {
+        if (multipartFile.isEmpty()) {
+            throw new EmptyFileException();
+        }
+        String fileName = UUID.randomUUID().toString(); // 新文件名
+        File dest = new File(FileStore.AVATAR_DIR + fileName);
+        File parent = dest.getParentFile();
+        if (!parent.exists()) {
+            boolean success = parent.mkdirs();
+            if (!success) {
+                throw new InnerServiceException();
+            }
+        }
+        multipartFile.transferTo(dest);
+        InetAddress address = Inet4Address.getLocalHost();
+        URL url = new URL("http", address.getHostAddress(), getPort(), "/funchat/avatar/" + fileName);
+        mLogger.info(url.toString());
+        mUserDao.updateAvatar(userId, url.toString());
+    }
+
+
+    private int getPort() {
+        String port = environment.getProperty("local.server.port");
+        if (port == null || port.isEmpty()) {
+            return 80;
+        }
+        return Integer.parseInt(port);
     }
 }

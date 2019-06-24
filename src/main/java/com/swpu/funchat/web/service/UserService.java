@@ -1,6 +1,11 @@
 package com.swpu.funchat.web.service;
 
 import com.swpu.funchat.model.dto.UserInfo;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 /**
  * Class description:
@@ -14,5 +19,9 @@ public interface UserService {
 
     UserInfo login(String username, String password);
 
-    UserInfo getUserInfoById(long id);
+    void register(String phone, String password);
+
+    void updateNickname(long id, String nickname);
+
+    void updateAvatar(long userId, MultipartFile multipartFile) throws IOException;
 }

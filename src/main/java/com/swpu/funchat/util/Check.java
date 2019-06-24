@@ -1,9 +1,6 @@
 package com.swpu.funchat.util;
 
-import com.swpu.funchat.oauth.exception.DifferentPasswordException;
-import com.swpu.funchat.oauth.exception.EmptyPasswordException;
-import com.swpu.funchat.oauth.exception.EmptyUsernameException;
-import com.swpu.funchat.oauth.exception.PasswordTooShortException;
+import com.swpu.funchat.oauth.exception.*;
 
 /**
  * Class description:
@@ -18,6 +15,12 @@ public class Check {
     public static void checkUsername(String username) {
         if (username.equals("")) {
             throw new EmptyUsernameException();
+        }
+    }
+
+    public static void checkPhone(String phone) {
+        if (!Validator.isMobileNumber(phone)) {
+            throw new IllegalPhoneNumberException();
         }
     }
 
