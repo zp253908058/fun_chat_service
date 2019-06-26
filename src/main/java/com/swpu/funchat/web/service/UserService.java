@@ -23,5 +23,5 @@ public interface UserService {
 
     void updateNickname(long id, String nickname);
 
-    void updateAvatar(long userId, MultipartFile multipartFile) throws IOException;
+    String updateAvatar(long userId, MultipartFile multipartFile) throws IOException;
 }

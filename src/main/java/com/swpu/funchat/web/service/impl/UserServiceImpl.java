@@ -1,5 +1,6 @@
 package com.swpu.funchat.web.service.impl;
 
+import com.swpu.funchat.config.ApplicationConfig;
 import com.swpu.funchat.config.FileStore;
 import com.swpu.funchat.exception.EmptyFileException;
 import com.swpu.funchat.exception.InnerServiceException;
@@ -105,7 +106,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateAvatar(long userId, MultipartFile multipartFile) throws IOException {
+    public String updateAvatar(long userId, MultipartFile multipartFile) throws IOException {
         if (multipartFile.isEmpty()) {
             throw new EmptyFileException();
         }
@@ -119,10 +120,10 @@ public class UserServiceImpl implements UserService {
             }
         }
         multipartFile.transferTo(dest);
-        InetAddress address = Inet4Address.getLocalHost();
-        URL url = new URL("http", address.getHostAddress(), getPort(), "/funchat/avatar/" + fileName);
-        mLogger.info(url.toString());
-        mUserDao.updateAvatar(userId, url.toString());
+        URL url = new URL("http", ApplicationConfig.IP, getPort(), "/funchat/avatar/" + fileName);
+        String res = url.toString();
+        mUserDao.updateAvatar(userId, res);
+        return res;
     }
 
 

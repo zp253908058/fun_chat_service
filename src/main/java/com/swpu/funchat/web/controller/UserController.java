@@ -13,10 +13,11 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
+import java.io.*;
+import java.net.*;
+import java.util.Enumeration;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Class description:
@@ -46,8 +47,9 @@ public class UserController {
 
     @PostMapping("/avatar")
     public ResponseMessageEntity updateAvatar(@RequestParam("id") long userId, @RequestParam("avatar") MultipartFile multipartFile) throws IOException {
-        mLogger.info("upload start................................");
-        mUserService.updateAvatar(userId, multipartFile);
-        return new ResponseMessageEntity("修改成功");
+        String url = mUserService.updateAvatar(userId, multipartFile);
+        return new ResponseMessageEntity(url);
     }
 }
+
+
